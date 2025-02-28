@@ -49,7 +49,7 @@ def run_hedge_fund(
     end_date: str,
     portfolio: dict,
     show_reasoning: bool = False,
-    selected_analysts: list[str] = [],
+    selected_analysts: list[Dict] = [],
     model_name: str = "gpt-4o",
     model_provider: str = "OpenAI",
 ):
@@ -110,10 +110,11 @@ def create_workflow(selected_analysts=None):
 
     # Default to all analysts if none selected
     if selected_analysts is None:
-        selected_analysts = list(analyst_nodes.keys())
+        selected_analysts = list(analyst_nodes.values())
     # Add selected analyst nodes
-    for analyst_key in selected_analysts:
-        node_name, node_func = analyst_nodes[analyst_key]
+    for analyst in selected_analysts:
+        node_func = analys['agent_func']
+        node_name = node_func.__name__
         workflow.add_node(node_name, node_func)
         workflow.add_edge("start_node", node_name)
 

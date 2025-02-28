@@ -10,7 +10,7 @@ from colorama import Fore, Style, init
 import numpy as np
 import itertools
 
-from llm.models import LLM_ORDER, get_model_info, AVAILABLE_MODELS
+from llm.models import LLM_ORDER, get_model_info, MODEL_OPTIONS
 from utils.analysts import ANALYST_ORDER, ANALYST_CONFIG
 from utils.ui import interactive_choice, interactive_multiple_choice
 from main import run_hedge_fund
@@ -686,7 +686,7 @@ if __name__ == "__main__":
         )
 
     # Select LLM model
-    model_choice = interactive_choice(AVAILABLE_MODELS)
+    model_choice = interactive_choice(MODEL_OPTIONS)['model']
     # model_choice = questionary.select(
     #     "Select your LLM model:",
     #     choices=[questionary.Choice(display, value=value) for display, value, _ in LLM_ORDER],

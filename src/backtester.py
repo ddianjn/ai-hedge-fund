@@ -704,7 +704,7 @@ if __name__ == "__main__":
     else:
         # model_info = get_model_info(model_choice)
         model_info = model_choice
-        model_choice = model_info['display_name']
+        model_choice = model_info.display_name
         if model_info:
             model_provider = model_info.provider.value
             print(f"\nSelected {Fore.CYAN}{model_provider}{Style.RESET_ALL} model: {Fore.GREEN + Style.BRIGHT}{model_choice}{Style.RESET_ALL}\n")

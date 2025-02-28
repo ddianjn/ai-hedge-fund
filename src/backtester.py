@@ -12,6 +12,7 @@ import itertools
 
 from llm.models import LLM_ORDER, get_model_info
 from utils.analysts import ANALYST_ORDER
+from utils.ui import interactive_choice, interactive_multiple_choice
 from main import run_hedge_fund
 from tools.api import (
     get_company_news,
@@ -657,20 +658,21 @@ if __name__ == "__main__":
 
     # Choose analysts
     selected_analysts = None
-    choices = questionary.checkbox(
-        "Use the Space bar to select/unselect analysts.",
-        choices=[questionary.Choice(display, value=value) for display, value in ANALYST_ORDER],
-        instruction="\n\nPress 'a' to toggle all.\n\nPress Enter when done to run the hedge fund.",
-        validate=lambda x: len(x) > 0 or "You must select at least one analyst.",
-        style=questionary.Style(
-            [
-                ("checkbox-selected", "fg:green"),
-                ("selected", "fg:green noinherit"),
-                ("highlighted", "noinherit"),
-                ("pointer", "noinherit"),
-            ]
-        ),
-    ).ask()
+    choices = interactive_choice(ANALYST_ORDER)
+    # choices = questionary.checkbox(
+    #     "Use the Space bar to select/unselect analysts.",
+    #     choices=[questionary.Choice(display, value=value) for display, value in ANALYST_ORDER],
+    #     instruction="\n\nPress 'a' to toggle all.\n\nPress Enter when done to run the hedge fund.",
+    #     validate=lambda x: len(x) > 0 or "You must select at least one analyst.",
+    #     style=questionary.Style(
+    #         [
+    #             ("checkbox-selected", "fg:green"),
+    #             ("selected", "fg:green noinherit"),
+    #             ("highlighted", "noinherit"),
+    #             ("pointer", "noinherit"),
+    #         ]
+    #     ),
+    # ).ask()
 
     if not choices:
         print("\n\nInterrupt received. Exiting...")
@@ -683,16 +685,17 @@ if __name__ == "__main__":
         )
 
     # Select LLM model
-    model_choice = questionary.select(
-        "Select your LLM model:",
-        choices=[questionary.Choice(display, value=value) for display, value, _ in LLM_ORDER],
-        style=questionary.Style([
-            ("selected", "fg:green bold"),
-            ("pointer", "fg:green bold"),
-            ("highlighted", "fg:green"),
-            ("answer", "fg:green bold"),
-        ])
-    ).ask()
+    model_choice = interactive_choice(LLM_ORDER)
+    # model_choice = questionary.select(
+    #     "Select your LLM model:",
+    #     choices=[questionary.Choice(display, value=value) for display, value, _ in LLM_ORDER],
+    #     style=questionary.Style([
+    #         ("selected", "fg:green bold"),
+    #         ("pointer", "fg:green bold"),
+    #         ("highlighted", "fg:green"),
+    #         ("answer", "fg:green bold"),
+    #     ])
+    # ).ask()
 
     if not model_choice:
         print("\n\nInterrupt received. Exiting...")

@@ -124,8 +124,8 @@ def create_workflow(selected_analysts=None):
     workflow.add_node("portfolio_management_agent", portfolio_management_agent)
 
     # Connect selected analysts to risk management
-    for analyst_key in selected_analysts:
-        node_name = analyst_nodes[analyst_key][0]
+    for analyst in selected_analysts:
+        node_name = analyst['agent_func'].__name__
         workflow.add_edge(node_name, "risk_management_agent")
 
     workflow.add_edge("risk_management_agent", "portfolio_management_agent")

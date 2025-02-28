@@ -81,6 +81,8 @@ AVAILABLE_MODELS = [
 # Create LLM_ORDER in the format expected by the UI
 LLM_ORDER = [model.to_choice_tuple() for model in AVAILABLE_MODELS]
 
+MODEL_OPTIONS = [{'display_name': model.display_name, 'model': model} for model in AVAILABLE_MODELS]
+
 def get_model_info(model_name: str) -> LLMModel | None:
     """Get model information by model_name"""
     return next((model for model in AVAILABLE_MODELS if model.model_name == model_name), None)

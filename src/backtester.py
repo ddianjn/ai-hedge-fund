@@ -681,7 +681,8 @@ if __name__ == "__main__":
         selected_analysts = choices
         print(
             f"\nSelected analysts: "
-            f"{', '.join(Fore.GREEN + choice.title().replace('_', ' ') + Style.RESET_ALL for choice in choices)}"
+            f"{', '.join(Fore.GREEN + choice['display_name'] + Style.RESET_ALL for choice in choices)}"
+            # f"{', '.join(Fore.GREEN + choice.title().replace('_', ' ') + Style.RESET_ALL for choice in choices)}"
         )
 
     # Select LLM model

@@ -10,7 +10,7 @@ from colorama import Fore, Style, init
 import numpy as np
 import itertools
 
-from llm.models import LLM_ORDER, get_model_info
+from llm.models import LLM_ORDER, get_model_info, AVAILABLE_MODELS
 from utils.analysts import ANALYST_ORDER, ANALYST_CONFIG
 from utils.ui import interactive_choice, interactive_multiple_choice
 from main import run_hedge_fund
@@ -658,7 +658,7 @@ if __name__ == "__main__":
 
     # Choose analysts
     selected_analysts = None
-    choices = interactive_choice(list(ANALYST_CONFIG.values()))
+    choices = interactive_multiple_choice(list(ANALYST_CONFIG.values()))
     # choices = questionary.checkbox(
     #     "Use the Space bar to select/unselect analysts.",
     #     choices=[questionary.Choice(display, value=value) for display, value in ANALYST_ORDER],
@@ -685,7 +685,7 @@ if __name__ == "__main__":
         )
 
     # Select LLM model
-    model_choice = interactive_choice(LLM_ORDER)
+    model_choice = interactive_choice(AVAILABLE_MODELS)
     # model_choice = questionary.select(
     #     "Select your LLM model:",
     #     choices=[questionary.Choice(display, value=value) for display, value, _ in LLM_ORDER],

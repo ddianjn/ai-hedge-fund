@@ -19,7 +19,7 @@ from agents.valuation import valuation_agent
 from utils.display import print_trading_output
 from utils.analysts import ANALYST_ORDER, get_analyst_nodes
 from utils.progress import progress
-from llm.models import LLM_ORDER, get_model_info
+from llm.models import LLM_ORDER, get_model_info, MODEL_OPTIONS
 
 import argparse
 from datetime import datetime
@@ -114,7 +114,7 @@ def create_workflow(selected_analysts=None):
         selected_analysts = list(analyst_nodes.values())
     # Add selected analyst nodes
     for analyst in selected_analysts:
-        node_func = analys['agent_func']
+        node_func = analyst['agent_func']
         node_name = node_func.__name__
         workflow.add_node(node_name, node_func)
         workflow.add_edge("start_node", node_name)
@@ -168,39 +168,42 @@ if __name__ == "__main__":
 
     # Select analysts
     selected_analysts = None
-    choices = questionary.checkbox(
-        "Select your AI analysts.",
-        choices=[questionary.Choice(display, value=value) for display, value in ANALYST_ORDER],
-        instruction="\n\nInstructions: \n1. Press Space to select/unselect analysts.\n2. Press 'a' to select/unselect all.\n3. Press Enter when done to run the hedge fund.\n",
-        validate=lambda x: len(x) > 0 or "You must select at least one analyst.",
-        style=questionary.Style(
-            [
-                ("checkbox-selected", "fg:green"),
-                ("selected", "fg:green noinherit"),
-                ("highlighted", "noinherit"),
-                ("pointer", "noinherit"),
-            ]
-        ),
-    ).ask()
+    choices = interactive_multiple_choice(list(ANALYST_CONFIG.values()))
+    # choices = questionary.checkbox(
+    #     "Select your AI analysts.",
+    #     choices=[questionary.Choice(display, value=value) for display, value in ANALYST_ORDER],
+    #     instruction="\n\nInstructions: \n1. Press Space to select/unselect analysts.\n2. Press 'a' to select/unselect all.\n3. Press Enter when done to run the hedge fund.\n",
+    #     validate=lambda x: len(x) > 0 or "You must select at least one analyst.",
+    #     style=questionary.Style(
+    #         [
+    #             ("checkbox-selected", "fg:green"),
+    #             ("selected", "fg:green noinherit"),
+    #             ("highlighted", "noinherit"),
+    #             ("pointer", "noinherit"),
+    #         ]
+    #     ),
+    # ).ask()
 
     if not choices:
         print("\n\nInterrupt received. Exiting...")
         sys.exit(0)
     else:
         selected_analysts = choices
-        print(f"\nSelected analysts: {', '.join(Fore.GREEN + choice.title().replace('_', ' ') + Style.RESET_ALL for choice in choices)}\n")
+        print(f"\nSelected analysts: {', '.join(Fore.GREEN + choice['display_name'] + Style.RESET_ALL for choice in choices)}\n")
+        # print(f"\nSelected analysts: {', '.join(Fore.GREEN + choice.title().replace('_', ' ') + Style.RESET_ALL for choice in choices)}\n")
 
     # Select LLM model
-    model_choice = questionary.select(
-        "Select your LLM model:",
-        choices=[questionary.Choice(display, value=value) for display, value, _ in LLM_ORDER],
-        style=questionary.Style([
-            ("selected", "fg:green bold"),
-            ("pointer", "fg:green bold"),
-            ("highlighted", "fg:green"),
-            ("answer", "fg:green bold"),
-        ])
-    ).ask()
+    model_choice = interactive_choice(MODEL_OPTIONS)['model']
+    # model_choice = questionary.select(
+    #     "Select your LLM model:",
+    #     choices=[questionary.Choice(display, value=value) for display, value, _ in LLM_ORDER],
+    #     style=questionary.Style([
+    #         ("selected", "fg:green bold"),
+    #         ("pointer", "fg:green bold"),
+    #         ("highlighted", "fg:green"),
+    #         ("answer", "fg:green bold"),
+    #     ])
+    # ).ask()
 
     if not model_choice:
         print("\n\nInterrupt received. Exiting...")

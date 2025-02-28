@@ -11,7 +11,7 @@ import numpy as np
 import itertools
 
 from llm.models import LLM_ORDER, get_model_info
-from utils.analysts import ANALYST_ORDER
+from utils.analysts import ANALYST_ORDER, ANALYST_CONFIG
 from utils.ui import interactive_choice, interactive_multiple_choice
 from main import run_hedge_fund
 from tools.api import (
@@ -658,7 +658,7 @@ if __name__ == "__main__":
 
     # Choose analysts
     selected_analysts = None
-    choices = interactive_choice(ANALYST_ORDER)
+    choices = interactive_choice(list(ANALYST_CONFIG.values()))
     # choices = questionary.checkbox(
     #     "Use the Space bar to select/unselect analysts.",
     #     choices=[questionary.Choice(display, value=value) for display, value in ANALYST_ORDER],
